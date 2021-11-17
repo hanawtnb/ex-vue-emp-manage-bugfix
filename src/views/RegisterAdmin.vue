@@ -3,6 +3,7 @@
     <div class="row register-page">
       <form class="col s12" id="reg-form">
         <div class="row">
+          <div class="errorMessage">{{ errorMessageforDuplicateEmail }}</div>
           <div class="input-field col s6">
             <div class="errorMessage">{{ errorMessageforLastName }}</div>
             <input
@@ -96,6 +97,8 @@ export default class RegisterAdmin extends Vue {
   private errorMessageforEmail = "";
   // パスワードのエラーメッセージ
   private errorMessageforPassword = "";
+  // 重複メールアドレスのエラーメッセージ
+  private errorMessageforDuplicateEmail = "";
 
   /**
    * 管理者情報を登録する.
@@ -132,8 +135,11 @@ export default class RegisterAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-
-    this.$router.push("/loginAdmin");
+    if (response.data.status == "success") {
+      this.$router.push("/loginAdmin");
+    } else if (response.data.status == "error") {
+      this.errorMessageforDuplicateEmail = "登録できませんでした";
+    }
   }
 }
 </script>
