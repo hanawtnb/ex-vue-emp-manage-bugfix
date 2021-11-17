@@ -5,6 +5,7 @@
         <form class="login-form">
           <div class="row"></div>
           <div class="row">
+            <div class="errorMessage">{{ errorMessageforFailLogin }}</div>
             <div class="input-field col s12">
               <i class="material-icons prefix">mail_outline</i>
               <input
@@ -65,6 +66,8 @@ export default class LoginAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // ログイン失敗時のエラーメッセージ
+  private errorMessageforFailLogin = "";
 
   /**
    * ログインする.
@@ -79,9 +82,13 @@ export default class LoginAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-
-    // 従業員一覧に遷移する
-    this.$router.push("/employeeList");
+    if (response.data.status == "success") {
+      // 成功時は従業員一覧に遷移する
+      this.$router.push("/employeeList");
+    } else if (response.data.status == "error") {
+      // 失敗時はエラーメッセージを表示する
+      this.errorMessageforFailLogin = "ログインに失敗しました";
+    }
   }
 }
 </script>
@@ -89,5 +96,10 @@ export default class LoginAdmin extends Vue {
 <style scoped>
 .login-page {
   width: 600px;
+}
+
+.errorMessage {
+  color: red;
+  margin-left: 50px;
 }
 </style>
