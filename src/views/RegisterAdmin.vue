@@ -4,6 +4,7 @@
       <form class="col s12" id="reg-form">
         <div class="row">
           <div class="input-field col s6">
+            <div class="errorMessage">{{ errorMessageforLastName }}</div>
             <input
               id="last_name"
               type="text"
@@ -14,6 +15,7 @@
             <label for="last_name">姓</label>
           </div>
           <div class="input-field col s6">
+            <div class="errorMessage">{{ errorMessageforFirstName }}</div>
             <input
               id="first_name"
               type="text"
@@ -26,6 +28,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="errorMessage">{{ errorMessageforEmail }}</div>
             <input
               id="email"
               type="email"
@@ -38,6 +41,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="errorMessage">{{ errorMessageforPassword }}</div>
             <input
               id="password"
               type="password"
@@ -84,6 +88,14 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // 姓のエラーメッセージ
+  private errorMessageforLastName = "";
+  // 名のエラーメッセージ
+  private errorMessageforFirstName = "";
+  // メールアドレスのエラーメッセージ
+  private errorMessageforEmail = "";
+  // パスワードのエラーメッセージ
+  private errorMessageforPassword = "";
 
   /**
    * 管理者情報を登録する.
@@ -93,6 +105,26 @@ export default class RegisterAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async registerAdmin(): Promise<void> {
+    let hasErrors = false;
+    if (this.lastName == "") {
+      this.errorMessageforLastName = "姓を入力してください";
+      hasErrors = true;
+    }
+    if (this.firstName == "") {
+      this.errorMessageforFirstName = "名を入力してください";
+      hasErrors = true;
+    }
+    if (this.mailAddress == "") {
+      this.errorMessageforEmail = "メールアドレスを入力してください";
+      hasErrors = true;
+    }
+    if (this.password == "") {
+      this.errorMessageforPassword = "パスワードを入力してください";
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      return;
+    }
     // 管理者登録処理
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + " " + this.firstName,
@@ -109,5 +141,9 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+
+.errorMessage {
+  color: red;
 }
 </style>
