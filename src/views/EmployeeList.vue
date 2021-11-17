@@ -9,6 +9,10 @@
       </div>
     </nav>
     <div>従業員数:{{ getEmployeeCount }}人</div>
+    <!-- 従業員検索 -->
+    <input type="text" />
+    <button type="button">検索</button>
+
     <div class="row">
       <table class="striped">
         <thead>
