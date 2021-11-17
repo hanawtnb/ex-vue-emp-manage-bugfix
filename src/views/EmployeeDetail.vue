@@ -19,7 +19,7 @@
             <tr>
               <th nowrap>従業員名</th>
               <td>
-                <span v-html="currentEmployee.name"></span>
+                {{ currentEmployee.name }}
               </td>
             </tr>
             <tr>
@@ -31,7 +31,7 @@
             <tr>
               <th nowrap>性別</th>
               <td>
-                <span v-html="currentEmployee.gender"></span>
+                {{ currentEmployee.gender }}
               </td>
             </tr>
             <tr>
@@ -41,25 +41,25 @@
             <tr>
               <th nowrap>メールアドレス</th>
               <td>
-                <span v-html="currentEmployee.mailAddress"></span>
+                {{ currentEmployee.mailAddress }}
               </td>
             </tr>
             <tr>
               <th nowrap>郵便番号</th>
               <td>
-                <span v-html="currentEmployee.zipCode"></span>
+                {{ currentEmployee.zipCode }}
               </td>
             </tr>
             <tr>
               <th nowrap>住所</th>
               <td>
-                <span v-html="currentEmployee.address"></span>
+                {{ currentEmployee.address }}
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                <span v-html="currentEmployee.telephone"></span>
+                {{ currentEmployee.telephone }}
               </td>
             </tr>
             <tr>
@@ -71,7 +71,7 @@
             <tr>
               <th nowrap>特性</th>
               <td>
-                <span v-html="currentEmployee.characteristics"></span>
+                {{ currentEmployee.characteristics }}
               </td>
             </tr>
             <tr>
