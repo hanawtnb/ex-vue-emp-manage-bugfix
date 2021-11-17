@@ -4,8 +4,9 @@
       <form class="col s12" id="reg-form">
         <div class="row">
           <div class="errorMessage">{{ errorMessageforDuplicateEmail }}</div>
+          <div class="errorMessage">{{ errorMessageforLastName }}</div>
+          <div class="errorMessage">{{ errorMessageforFirstName }}</div>
           <div class="input-field col s6">
-            <div class="errorMessage">{{ errorMessageforLastName }}</div>
             <input
               id="last_name"
               type="text"
@@ -16,7 +17,6 @@
             <label for="last_name">姓</label>
           </div>
           <div class="input-field col s6">
-            <div class="errorMessage">{{ errorMessageforFirstName }}</div>
             <input
               id="first_name"
               type="text"
@@ -28,8 +28,8 @@
           </div>
         </div>
         <div class="row">
+          <div class="errorMessage">{{ errorMessageforEmail }}</div>
           <div class="input-field col s12">
-            <div class="errorMessage">{{ errorMessageforEmail }}</div>
             <input
               id="email"
               type="email"
@@ -41,8 +41,11 @@
           </div>
         </div>
         <div class="row">
+          <div class="errorMessage">{{ errorMessageforPassword }}</div>
+          <div class="errorMessage">
+            {{ errorMessageforConfirmationPassword }}
+          </div>
           <div class="input-field col s12">
-            <div class="errorMessage">{{ errorMessageforPassword }}</div>
             <input
               id="password"
               type="password"
@@ -52,6 +55,20 @@
               required
             />
             <label for="password">パスワード</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <div class="errorMessage"></div>
+            <input
+              id="confirmationPassword"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="confirmationPassword"
+              required
+            />
+            <label for="confirmationPassword">確認用パスワード</label>
           </div>
         </div>
         <div class="row">
@@ -89,6 +106,8 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // 確認用パスワード
+  private confirmationPassword = "";
   // 姓のエラーメッセージ
   private errorMessageforLastName = "";
   // 名のエラーメッセージ
@@ -97,6 +116,8 @@ export default class RegisterAdmin extends Vue {
   private errorMessageforEmail = "";
   // パスワードのエラーメッセージ
   private errorMessageforPassword = "";
+  // 確認用パスワードのエラーメッセージ
+  private errorMessageforConfirmationPassword = "";
   // 重複メールアドレスのエラーメッセージ
   private errorMessageforDuplicateEmail = "";
 
@@ -125,6 +146,20 @@ export default class RegisterAdmin extends Vue {
       this.errorMessageforPassword = "パスワードを入力してください";
       hasErrors = true;
     }
+    if (this.confirmationPassword == "") {
+      this.errorMessageforConfirmationPassword =
+        "確認用パスワードを入力してください";
+      hasErrors = true;
+    } else if (this.password !== this.confirmationPassword) {
+      this.errorMessageforConfirmationPassword = "パスワードが一致していません";
+      hasErrors = true;
+      this.errorMessageforLastName = "";
+      this.errorMessageforFirstName = "";
+      this.errorMessageforEmail = "";
+      this.errorMessageforPassword = "";
+      this.password = "";
+      this.confirmationPassword = "";
+    }
     if (hasErrors) {
       return;
     }
@@ -151,5 +186,6 @@ export default class RegisterAdmin extends Vue {
 
 .errorMessage {
   color: red;
+  margin-left: 10px;
 }
 </style>
