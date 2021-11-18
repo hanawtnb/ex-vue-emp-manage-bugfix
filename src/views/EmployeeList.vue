@@ -10,8 +10,17 @@
     </nav>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <!-- 従業員検索 -->
-    <input type="text" />
-    <button type="button">検索</button>
+    <form class="searchForm">
+      <input type="text" v-model="searchName" />
+    </form>
+    <button
+      class="waves-effect waves-light btn searchBtn"
+      type="button"
+      @click="searchEmployeeByName"
+    >
+      検索
+    </button>
+    <div class="errorMessage">{{ errorMessageforNoHit }}</div>
 
     <div class="row">
       <table class="striped">
@@ -51,6 +60,10 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  // 検索する従業員名
+  private searchName = "";
+  // 曖昧検索で1件も見つからなかった時にエラーメッセージ
+  private errorMessageforNoHit = "";
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -78,6 +91,33 @@ export default class EmployeeList extends Vue {
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
   }
+  /**
+   * 従業員名で曖昧検索した結果を返す.
+   *
+   * @return 渡された文字列を含む従業員
+   */
+  searchEmployeeByName(): void {
+    let hitEmployees = this["$store"].getters.getSearchEmployeeByName(
+      this.searchName
+    );
+    let hasErrors = false;
+    console.log("hitEmployees:" + hitEmployees);
+
+    // 検索結果がなしの場合、未入力で検索された場合は全件を返す
+    if (hitEmployees.length == 0 || this.searchName == "") {
+      this.errorMessageforNoHit = "１件もありませんでしたので全件表示します";
+      this.currentEmployeeList = this["$store"].getters.getAllEmployees;
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      return;
+    }
+    // 検索した結果を返す
+    this.errorMessageforNoHit = "";
+    this.currentEmployeeList = this["$store"].getters.getSearchEmployeeByName(
+      this.searchName
+    );
+  }
 }
 </script>
 
@@ -92,5 +132,10 @@ export default class EmployeeList extends Vue {
   display: block;
   width: 150px;
   margin: 0 auto;
+}
+
+.errorMessage {
+  color: red;
+  margin: 10px;
 }
 </style>
