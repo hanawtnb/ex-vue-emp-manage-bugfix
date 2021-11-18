@@ -24,7 +24,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id">
+          <tr v-for="employee of Employees" v-bind:key="employee.id">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
@@ -35,6 +35,17 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="paging">
+      <span v-for="page of pageNumber" v-bind:key="page">
+        <button
+          class="waves-effect waves-light btn"
+          type="button"
+          @click="onMovePage(page)"
+        >
+          {{ page }}</button
+        >&nbsp;
+      </span>
     </div>
   </div>
 </template>
@@ -51,6 +62,8 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  // 最初に表示されるページ数
+  private page = 1;
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -78,6 +91,35 @@ export default class EmployeeList extends Vue {
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
   }
+  /**
+   * 全従業員数を返す.
+   * @returns 従業員数
+   */
+  get allEmployeeCount(): number {
+    return this["$store"].getters.getAllEmployeeCount;
+  }
+  /**
+   * ページ数を計算して返す.
+   *
+   * @return 用意する必要のあるページ数
+   */
+  get pageNumber(): number {
+    return Math.ceil(this.allEmployeeCount / 10);
+  }
+  /**
+   * １ページで取得する従業員のリストを取得して返す.
+   *
+   * @remarks １ページで表示する人数は10人
+   * @returns 1人目から10人ずつ切り取って返す
+   */
+  get Employees(): Array<Employee> {
+    const employee = this["$store"].getters.getAllEmployees;
+    return employee.slice((this.page - 1) * 10, this.page * 10);
+  }
+
+  onMovePage(page: number): void {
+    this.page = page;
+  }
 }
 </script>
 
@@ -92,5 +134,10 @@ export default class EmployeeList extends Vue {
   display: block;
   width: 150px;
   margin: 0 auto;
+}
+
+.paging {
+  text-align: center;
+  padding-bottom: 30px;
 }
 </style>
