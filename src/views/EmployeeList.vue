@@ -89,6 +89,12 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
+    // もしログイン状態がfalseならログイン画面に遷移する
+    if (this["$store"].getters.getLoginStatus == false) {
+      this.$router.push("/loginAdmin");
+      return;
+    }
+
     await this.$store.dispatch("getEmployeeList");
 
     // 従業員一覧情報をVuexストアから取得
