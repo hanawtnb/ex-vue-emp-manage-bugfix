@@ -9,6 +9,10 @@
       </div>
     </nav>
     <div>従業員数:{{ getEmployeeCount }}人</div>
+    <!-- 従業員検索 -->
+    <input type="text" />
+    <button type="button">検索</button>
+
     <div class="row">
       <table class="striped">
         <thead>
@@ -64,7 +68,7 @@ export default class EmployeeList extends Vue {
     // 従業員一覧情報をVuexストアから取得
     // 非同期で外部APIから取得しているので、async/await使わないとGetterで取得できない
     // ページング機能実装のため最初の10件に絞り込み
-    this.currentEmployeeList = this.$store.getters.getAllEmployees;
+    this.currentEmployeeList = this["$store"].getters.getAllEmployees;
   }
   /**
    * 現在表示されている従業員一覧の数を返す.
