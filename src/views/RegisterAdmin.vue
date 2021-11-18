@@ -27,6 +27,46 @@
             <label for="first_name">名</label>
           </div>
         </div>
+        <!-- 住所 -->
+
+        <div class="row">
+          <div class="input-field col s6">
+            <!-- <div class="errorMessage">{{ errorMessageforAddress }}</div> -->
+            <input
+              id="zipCode"
+              type="text"
+              class="validate"
+              size="7"
+              v-model="zipCode"
+              required
+            />
+            <label for="zipCode">郵便番号</label>
+          </div>
+          <div class="row">
+            <button
+              class="waves-effect waves-light btn searchBtn"
+              id="get_address_btn"
+              type="button"
+              @click="getAddress()"
+            >
+              住所検索
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input
+              id="address"
+              type="text"
+              class="validate"
+              v-model="address"
+              required
+            />
+            <label for="address">住所</label>
+          </div>
+        </div>
+
+        <!-- 住所ここまで -->
         <div class="row">
           <div class="errorMessage">{{ errorMessageforEmail }}</div>
           <div class="input-field col s12">
@@ -92,6 +132,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import config from "@/const/const";
 import axios from "axios";
+// import axiosJsonpAdapter from "axios-jsonp";
 
 /**
  * 管理者登録をする画面.
@@ -102,6 +143,10 @@ export default class RegisterAdmin extends Vue {
   private lastName = "";
   // 名
   private firstName = "";
+  // 郵便番号
+  private zipCode = "";
+  // 住所
+  private address = "";
   // メールアドレス
   private mailAddress = "";
   // パスワード
@@ -120,7 +165,6 @@ export default class RegisterAdmin extends Vue {
   private errorMessageforConfirmationPassword = "";
   // 重複メールアドレスのエラーメッセージ
   private errorMessageforDuplicateEmail = "";
-
   /**
    * 管理者情報を登録する.
    *
@@ -164,6 +208,7 @@ export default class RegisterAdmin extends Vue {
       name: this.lastName + " " + this.firstName,
       mailAddress: this.mailAddress,
       password: this.password,
+      address: this.address,
     });
     console.dir("response:" + JSON.stringify(response));
     if (response.data.status == "success") {
@@ -171,6 +216,23 @@ export default class RegisterAdmin extends Vue {
     } else if (response.data.status == "error") {
       this.errorMessageforDuplicateEmail = "登録できませんでした";
     }
+  }
+  /**
+   * 住所を外部APIから検索して取得
+   *
+   * @remaeks 郵便番号を入力して検索ボタンを押すと自動で住所入力欄に該当の住所が入力される
+   */
+  async getAddress(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const axiosJsonpAdapter = require("axios-jsonp");
+    const response = await axios.get("https://zipcoda.net/api", {
+      adapter: axiosJsonpAdapter,
+      params: {
+        zipcode: this.zipCode,
+      },
+    });
+    console.dir(JSON.stringify(response));
+    this.address = response.data.items[0].address;
   }
 }
 </script>
@@ -183,5 +245,9 @@ export default class RegisterAdmin extends Vue {
 .errorMessage {
   color: red;
   margin-left: 10px;
+}
+
+.searchBtn {
+  margin: 10px;
 }
 </style>
