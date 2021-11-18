@@ -101,14 +101,10 @@ export default class EmployeeList extends Vue {
       this.searchName
     );
     let hasErrors = false;
-    // 未入力で検索された場合は全件を返す
-    if (this.searchName == "") {
-      this.errorMessageforNoHit = "１件もありませんでしたので全件表示します";
-      this.currentEmployeeList = this["$store"].getters.getAllEmployees;
-      hasErrors = true;
-    }
-    // 検索結果がなしの場合は全件を返す
-    if (hitEmployees.length == 0) {
+    console.log("hitEmployees:" + hitEmployees);
+
+    // 検索結果がなしの場合、未入力で検索された場合は全件を返す
+    if (hitEmployees.length == 0 || this.searchName == "") {
       this.errorMessageforNoHit = "１件もありませんでしたので全件表示します";
       this.currentEmployeeList = this["$store"].getters.getAllEmployees;
       hasErrors = true;
