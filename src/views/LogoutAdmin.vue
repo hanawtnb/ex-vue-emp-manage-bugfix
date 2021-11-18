@@ -22,6 +22,8 @@ export default class LogoutAdmin extends Vue {
   async created(): Promise<void> {
     const response = await axios.get(`${config.EMP_WEBAPI_URL}/logout`);
     console.dir("response:" + JSON.stringify(response));
+    // ログイン状態をfalseにする
+    this["$store"].commit("changeLoginStatus", false);
     // ログイン画面に遷移する
     this.$router.push("/loginAdmin");
   }

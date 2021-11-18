@@ -83,6 +83,8 @@ export default class LoginAdmin extends Vue {
     });
     console.dir("response:" + JSON.stringify(response));
     if (response.data.status == "success") {
+      // ログイン状態をtrueにする
+      this["$store"].commit("changeLoginStatus", true);
       // 成功時は従業員一覧に遷移する
       this.$router.push("/employeeList");
     } else if (response.data.status == "error") {
