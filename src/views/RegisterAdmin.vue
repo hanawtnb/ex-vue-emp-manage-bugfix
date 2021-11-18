@@ -186,6 +186,11 @@ export default class RegisterAdmin extends Vue {
       this.errorMessageforDuplicateEmail = "登録できませんでした";
     }
   }
+  /**
+   * 住所を外部APIから検索して取得
+   *
+   * @remaeks 郵便番号を入力して検索ボタンを押すと自動で住所入力欄に該当の住所が入力される
+   */
   async getAddress(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const axiosJsonpAdapter = require("axios-jsonp");
