@@ -153,10 +153,6 @@ export default class RegisterAdmin extends Vue {
     } else if (this.password !== this.confirmationPassword) {
       this.errorMessageforConfirmationPassword = "パスワードが一致していません";
       hasErrors = true;
-      this.errorMessageforLastName = "";
-      this.errorMessageforFirstName = "";
-      this.errorMessageforEmail = "";
-      this.errorMessageforPassword = "";
       this.password = "";
       this.confirmationPassword = "";
     }
