@@ -24,7 +24,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of Employees" v-bind:key="employee.id">
+          <tr v-for="employee of employees" v-bind:key="employee.id">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
@@ -112,7 +112,7 @@ export default class EmployeeList extends Vue {
    * @remarks １ページで表示する人数は10人
    * @returns 1人目から10人ずつ切り取って返す
    */
-  get Employees(): Array<Employee> {
+  get employees(): Array<Employee> {
     const employee = this["$store"].getters.getAllEmployees;
     return employee.slice((this.page - 1) * 10, this.page * 10);
   }
